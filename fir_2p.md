@@ -25,16 +25,16 @@ FIRフィルタは入力信号に係数列を乗じ, その移動平均を出力
 
 伝達関数のグラフを以下に示す.
 
-![h_1](E:\T-SUZUKI\Documents\43\document\fir_2p\fig\h_1.png)
+![h_1](,./fig/h_1.png)
 [図1](fig:h_1)
 
-![h_2](E:\T-SUZUKI\Documents\43\document\fir_2p\fig\h_2.png)
+![h_2](./fig/h_2.png)
 [図2](fig:h_2)
 
-![h_3](E:\T-SUZUKI\Documents\43\document\fir_2p\fig\h_3.png)
+![h_3](./fig/h_3.png)
 [図3](fig:h_3)
 
-![h_4](E:\T-SUZUKI\Documents\43\document\fir_2p\fig\h_4.png)
+![h_4](./fig/h_4.png)
 [図4](fig:h_4)
 
 [図1](fig:h_1)と[図2](fig:h_2)との比較からビット幅は伝達関数の利得には影響しないことがわかる. また[図1](fig:h_3)と[図3](fig:h_3)を比較すると[図3](fig:h_3)では通過域でリップルが大きくなっていることがわかる. これは係数列の誤差の影響で, タップ数が増えることで各係数の誤差がリップルとして表れているためである. また阻止域でも[図3](fig:h_3)のリップルは大きく, 結果的に利得はあまり増えていない.
