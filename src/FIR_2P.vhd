@@ -5,12 +5,8 @@
 --  Project		: Sample
 --  Block		: 
 --  Tree		: 
---  Designer	: T.Suzuki - HDK
---  Created		: 2019/02/20
--- =====================================================================
---	Rev.	Date		Designer	Change Description
--- ---------------------------------------------------------------------
---	v0.1	19/02/20	T.Suzuki		First
+--  Designer	: toms74209200
+--  Created		: 2018/12/04
 -- =====================================================================
 
 library ieee;
@@ -26,11 +22,6 @@ entity FIR_2P is
 		EN			: in	std_logic;							--(p) Data input enable
 		IN_DAT		: in	std_logic_vector(11 downto 0);		--(p) Data
 
---		out_sum0		: out	std_logic_vector(30 downto 0);
---		out_sum1		: out	std_logic_vector(30 downto 0);
---		out_sum2		: out	std_logic_vector(30 downto 0);
-
-		
 		OUT_DAT		: out	std_logic_vector(11 downto 0)		--(p) data
 		);
 end FIR_2P;
@@ -38,23 +29,23 @@ end FIR_2P;
 architecture RTL of FIR_2P is
 
 -- Signal array --
-type	reg_ary_type	is array (0 to 31) of std_logic_vector(11 downto 0);
-type	prdct_ary_type	is array (0 to 31) of std_logic_vector(24 downto 0);
-type	sum_a_ary_type	is array (0 to 15) of std_logic_vector(25 downto 0);
-type	sum_b_ary_type	is array (0 to 7) of std_logic_vector(26 downto 0);
-type	sum_c_ary_type	is array (0 to 4) of std_logic_vector(27 downto 0);
-type	sum_d_ary_type	is array (0 to 2) of std_logic_vector(28 downto 0);
-signal	dat_reg			: reg_ary_type;							-- data register array
-signal	prdct			: prdct_ary_type;						-- Product array
-signal	sum_a			: sum_a_ary_type;						-- Sum array
-signal	sum_b			: sum_b_ary_type;						-- Sum array
-signal	sum_c			: sum_c_ary_type;						-- Sum array
-signal	sum_d			: sum_d_ary_type;						-- Sum array
-signal	sum_e			: std_logic_vector(29 downto 0);		-- Sum array
+type	reg_ary_type	is array (0 to 31) of std_logic_vector(11 downto 0);	-- Data register array
+type	prdct_ary_type	is array (0 to 31) of std_logic_vector(24 downto 0);	-- Product array(signature/data/bit shift)
+type	sum_a_ary_type	is array (0 to 15) of std_logic_vector(25 downto 0);	-- Sum array
+type	sum_b_ary_type	is array (0 to 7) of std_logic_vector(26 downto 0);		-- Sum array
+type	sum_c_ary_type	is array (0 to 4) of std_logic_vector(27 downto 0);		-- Sum array
+type	sum_d_ary_type	is array (0 to 2) of std_logic_vector(28 downto 0);		-- Sum array
+signal	dat_reg			: reg_ary_type;											-- Data register array
+signal	prdct			: prdct_ary_type;										-- Product array
+signal	sum_a			: sum_a_ary_type;										-- Sum array
+signal	sum_b			: sum_b_ary_type;										-- Sum array
+signal	sum_c			: sum_c_ary_type;										-- Sum array
+signal	sum_d			: sum_d_ary_type;										-- Sum array
+signal	sum_e			: std_logic_vector(29 downto 0);						-- Sum array
 
 -- Coefficient table --
 type		coef_rom_type	is array(0 to 31) of std_logic_vector(4 downto 0);
-constant	coef	: coef_rom_type := (						-- signature & bit shift right
+constant	coef	: coef_rom_type := (										-- signature & bit shift right
 										"0" & X"0",
 										"0" & X"9",
 										"0" & X"8",
@@ -220,23 +211,6 @@ sum_d(1) <= signed_add(sum_c(2), sum_c(3));
 sum_e <= signed_add(sum_d(0), sum_d(1));
 
 
--- ***********************************************************
---	Divider
--- ***********************************************************
---process (CLK, nRST) begin
---	if (nRST = '0') then 
---		div <= (others => '0');
---	elsif (CLK'event and CLK = '1') then
---		if (EN = '1') then
---			div <= sum(17 downto 5);
---		end if;
---	end if;
---end process;
-
---out_sum0 <= sum(16);
---out_sum1 <= sum(24);
---out_sum2 <= sum(28);
---
 OUT_DAT <= sum_e(23 downto 12);
 
 
