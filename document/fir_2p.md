@@ -41,7 +41,64 @@ FIRフィルタは入力信号に係数列を乗じ, その移動平均を出力
 
 実装とのトレードオフを考えると, タップ数を減らしたほうが効果的である.
 
-実装量は通常のFIRフィルタに比べ, 大きく減らすことができたといえる. 特にハード乗算器を使用していない.
+## 実装
+
+以下に実装結果を示す. 実装環境はQuartus prime v18.0で, デバイスはcyclone 10 LPを選択した.
+```
++----------------------------------------------------------------------------------+
+; Flow Summary                                                                     ;
++------------------------------------+---------------------------------------------+
+; Flow Status                        ; Successful - Mon Feb 25 19:17:27 2019       ;
+; Quartus Prime Version              ; 18.0.0 Build 614 04/24/2018 SJ Lite Edition ;
+; Family                             ; Cyclone 10 LP                               ;
+; Total logic elements               ; 1,700 / 6,272 ( 27 % )                      ;
+;     Total combinational functions  ; 1,644 / 6,272 ( 26 % )                      ;
+;     Dedicated logic registers      ; 165 / 6,272 ( 3 % )                         ;
+; Total registers                    ; 165                                         ;
+; Total memory bits                  ; 204 / 276,480 ( < 1 % )                     ;
+; Embedded Multiplier 9-bit elements ; 0 / 30 ( 0 % )                              ;
+; Device                             ; 10CL006YE144C6G                             ;
+; Timing Models                      ; Final                                       ;
++------------------------------------+---------------------------------------------+
+```
+
+先行研究で製作したFIRフィルタの実装結果は以下の通りである.
+```
++----------------------------------------------------------------------------------+
+; Flow Summary                                                                     ;
++------------------------------------+---------------------------------------------+
+; Flow Status                        ; Successful - Mon Feb 25 19:24:20 2019       ;
+; Quartus Prime Version              ; 18.0.0 Build 614 04/24/2018 SJ Lite Edition ;
+; Family                             ; Cyclone 10 LP                               ;
+; Total logic elements               ; 2,512 / 6,272 ( 40 % )                      ;
+;     Total combinational functions  ; 2,384 / 6,272 ( 38 % )                      ;
+;     Dedicated logic registers      ; 687 / 6,272 ( 11 % )                        ;
+; Total registers                    ; 687                                         ;
+; Total memory bits                  ; 0 / 276,480 ( 0 % )                         ;
+; Embedded Multiplier 9-bit elements ; 0 / 30 ( 0 % )                              ;
+; Device                             ; 10CL006YE144C6G                             ;
+; Timing Models                      ; Final                                       ;
++------------------------------------+---------------------------------------------+
+```
+「Total logic elements」の項で7割弱削減することができた. 実装量は通常のFIRフィルタに比べ, 大きく減らすことができたといえる. 特にハード乗算器を使用していない.
+
+メモリ使用率の増加とレジスタ使用率の減少は記述の違いによるものだと思われる. 設計とは異なるためここでは議論しない.
+
+## 実験結果
+
+実験ではFPGAに今回作成したFIRフィルタのほかに, ADC, UARTを作成した. ADCから得られたデータにフィルタをかけ, 生データとフィルタをかけたデータ（フィルタデータ）をUARTでPCに転送した. ADCで受けた信号はサイン波(1[kHz])とノイズ信号の2種類である. PCに転送したデータはmaximaを用いて解析した.
+
+### サイン波
+![fig:sin_plot](./fig/sin_plot.png)
+
+![fig:sin_fft](./fig/sin_fft.png)
+
+FFTの結果では利得が現れているように見えないが, これは初めの32データが落ちているため, そのデータが影響を与えられていると思われる.
+
+### ノイズ信号
+![fig:noise_plot](./fig/noise_plot.png)
+
+![fig:noise_fft](./fig/noise_fft.png)
 
 ## 結論
 
